@@ -4,6 +4,7 @@ import {
   HostGrotesk_600SemiBold,
   useFonts,
 } from '@expo-google-fonts/host-grotesk';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 import { Greetings } from './screens/Greetings';
 
@@ -19,7 +20,9 @@ export function App() {
   }
 
   return (
-    <Greetings />
+    <SafeAreaProvider>
+      <Greetings />
+    </SafeAreaProvider>
   );
 }
 

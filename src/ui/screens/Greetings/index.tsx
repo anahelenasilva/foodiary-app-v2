@@ -1,10 +1,11 @@
 
 import React from 'react';
 import { ImageBackground } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 import greetingsBg from '@ui/assets/greetings-bg/image.jpg';
+import { Logo } from '@ui/components/Logo';
 
-import { AppText } from '@ui/components/AppText';
 import { styles } from './styles';
 
 export function Greetings() {
@@ -14,7 +15,9 @@ export function Greetings() {
       resizeMode='cover'
       style={styles.container}
     >
-      <AppText>Hello</AppText>
+      <SafeAreaView>
+        <Logo />
+      </SafeAreaView>
     </ImageBackground>
   );
 }
