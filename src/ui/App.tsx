@@ -4,11 +4,8 @@ import {
   HostGrotesk_600SemiBold,
   useFonts,
 } from '@expo-google-fonts/host-grotesk';
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, View } from 'react-native';
 
-import { AppText } from './components/AppText';
-import { theme } from './theme';
+import { Greetings } from './screens/Greetings';
 
 export function App() {
   const [areFontsLoaded] = useFonts({
@@ -22,17 +19,7 @@ export function App() {
   }
 
   return (
-    <View style={styles.container}>
-      <AppText style={{ textAlign: 'right' }}>Open up App.tsx to start working on your app!</AppText>
-      <StatusBar style="auto" />
-    </View>
+    <Greetings />
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: theme.colors.lime[500],
-    justifyContent: 'center',
-  },
-});
