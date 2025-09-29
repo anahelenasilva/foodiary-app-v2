@@ -7,7 +7,7 @@ import {
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 
-import { Greetings } from './screens/Greetings';
+import { Navigation } from '@app/navigation';
 
 export function App() {
   const [areFontsLoaded] = useFonts({
@@ -23,7 +23,7 @@ export function App() {
   return (
     <GestureHandlerRootView>
       <SafeAreaProvider>
-        <Greetings />
+        <Navigation />
       </SafeAreaProvider>
     </GestureHandlerRootView>
   );

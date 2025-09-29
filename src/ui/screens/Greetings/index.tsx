@@ -1,4 +1,5 @@
 
+import { useNavigation } from '@react-navigation/native';
 import React, { useRef } from 'react';
 import { ImageBackground, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -11,10 +12,12 @@ import { SignInBottomSheet } from '@ui/components/SignInBottomSheet';
 import { ISignInBottomSheet } from '@ui/components/SignInBottomSheet/ISignInBottomSheet';
 import { theme } from '@ui/styles/theme';
 
+import { AuthStackNavigationProps } from '@app/navigation/AuthStack';
 import { styles } from './styles';
 
 export function Greetings() {
   const signInBottomSheetRef = useRef<ISignInBottomSheet>(null);
+  const navigation = useNavigation<AuthStackNavigationProps>();
 
   return (
     <>
@@ -37,7 +40,7 @@ export function Greetings() {
             </AppText>
 
             <View style={styles.ctaContent}>
-              <Button>
+              <Button onPress={() => navigation.navigate('Onboarding')}>
                 Criar conta
               </Button>
 
