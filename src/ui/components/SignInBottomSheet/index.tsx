@@ -1,8 +1,13 @@
 import { BottomSheetModal, BottomSheetModalProvider, BottomSheetView } from '@gorhom/bottom-sheet';
 import React from 'react';
 
+import { View } from 'react-native';
 import { AppText } from '../AppText';
+import { Button } from '../Button';
+import { FormGroup } from '../FormGroup';
+import { Input } from '../Input';
 import { ISignInBottomSheet } from './ISignInBottomSheet';
+import { styles } from './styles';
 import { useSignInBottomSheetController } from './useSignInBottomSheetController';
 
 interface ISignInBottomSheetProps {
@@ -15,8 +20,27 @@ export function SignInBottomSheet({ ref }: ISignInBottomSheetProps) {
   return (
     <BottomSheetModalProvider>
       <BottomSheetModal ref={bottomSheetModalRef}>
-        <BottomSheetView style={{ paddingBottom: bottom }}>
-          <AppText>Acesse a sua conta</AppText>
+        <BottomSheetView style={[
+          styles.container,
+          { paddingBottom: bottom },
+        ]}>
+          <AppText size="3xl" weight="semiBold" style={styles.heading}>
+            Acesse a sua conta
+          </AppText>
+
+          <View style={styles.form}>
+            <FormGroup label='E-mail'>
+              <Input />
+            </FormGroup>
+
+            <FormGroup label='Senha'>
+              <Input />
+            </FormGroup>
+
+            <Button>
+              Entrar
+            </Button>
+          </View>
         </BottomSheetView>
       </BottomSheetModal>
     </BottomSheetModalProvider>
