@@ -1,21 +1,23 @@
 import { theme } from '@ui/styles/theme';
-import { NativeSyntheticEvent, TextInput, TextInputFocusEventData } from 'react-native';
+import { NativeSyntheticEvent, TextInput, TextInputFocusEventData, TextInputProps } from 'react-native';
 
 import { VariantProps } from '@ui/styles/utils/createVariants';
 import { useState } from 'react';
 import { inputStyles } from './styles';
 
-type BaseTextInputProps = Omit<React.ComponentProps<typeof TextInput>, 'readOnly'>;
+type BaseTextInputProps = Omit<TextInputProps, 'readOnly'>;
 
 export interface IInputProps extends BaseTextInputProps {
   error?: boolean;
   disabled?: boolean;
+  InputComponent?: React.ComponentType<TextInputProps>;
 }
 
 export function Input({
   style,
   error,
   disabled,
+  InputComponent = TextInput,
   onFocus,
   onBlur,
   ...props
@@ -45,7 +47,7 @@ export function Input({
   }
 
   return (
-    <TextInput
+    <InputComponent
       style={[
         inputStyles({
           status: getInputStatus(),

@@ -1,4 +1,4 @@
-import { BottomSheetModal, BottomSheetModalProvider, BottomSheetView } from '@gorhom/bottom-sheet';
+import { BottomSheetModal, BottomSheetModalProvider, BottomSheetTextInput, BottomSheetView } from '@gorhom/bottom-sheet';
 import React from 'react';
 
 import { View } from 'react-native';
@@ -30,11 +30,11 @@ export function SignInBottomSheet({ ref }: ISignInBottomSheetProps) {
 
           <View style={styles.form}>
             <FormGroup label='E-mail'>
-              <Input />
+              <Input InputComponent={BottomSheetTextInput} />
             </FormGroup>
 
             <FormGroup label='Senha'>
-              <Input />
+              <Input InputComponent={BottomSheetTextInput} />
             </FormGroup>
 
             <Button>
