@@ -15,7 +15,12 @@ interface ISignInBottomSheetProps {
 }
 
 export function SignInBottomSheet({ ref }: ISignInBottomSheetProps) {
-  const { bottomSheetModalRef, bottom } = useSignInBottomSheetController(ref);
+  const {
+    bottomSheetModalRef,
+    bottom,
+    passwordInputRef,
+    handleSubmit,
+  } = useSignInBottomSheetController(ref);
 
   return (
     <BottomSheetModalProvider>
@@ -29,15 +34,32 @@ export function SignInBottomSheet({ ref }: ISignInBottomSheetProps) {
           </AppText>
 
           <View style={styles.form}>
-            <FormGroup label='E-mail'>
-              <Input InputComponent={BottomSheetTextInput} />
+            <FormGroup label="E-mail">
+              <Input
+                InputComponent={BottomSheetTextInput}
+                keyboardType="email-address"
+                autoCapitalize="none"
+                autoCorrect={false}
+                autoComplete="email"
+                returnKeyType="next"
+                onSubmitEditing={() => passwordInputRef.current?.focus()}
+              />
             </FormGroup>
 
-            <FormGroup label='Senha'>
-              <Input InputComponent={BottomSheetTextInput} />
+            <FormGroup label="Senha">
+              <Input
+                ref={passwordInputRef}
+                InputComponent={BottomSheetTextInput}
+                secureTextEntry
+                autoCapitalize="none"
+                autoCorrect={false}
+                autoComplete="current-password"
+                returnKeyType="done"
+                onSubmitEditing={handleSubmit}
+              />
             </FormGroup>
 
-            <Button>
+            <Button onPress={handleSubmit}>
               Entrar
             </Button>
           </View>

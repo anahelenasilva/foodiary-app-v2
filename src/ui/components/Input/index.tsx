@@ -11,6 +11,7 @@ export interface IInputProps extends BaseTextInputProps {
   error?: boolean;
   disabled?: boolean;
   InputComponent?: React.ComponentType<TextInputProps>;
+  ref?: React.Ref<TextInput>;
 }
 
 export function Input({
