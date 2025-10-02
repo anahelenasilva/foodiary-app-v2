@@ -1,16 +1,28 @@
 import { ChevronLeftIcon } from 'lucide-react-native';
-import React from 'react';
-import { View } from 'react-native';
+import React, { useEffect, useRef } from 'react';
+import { Animated, View } from 'react-native';
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { Button } from '@ui/components/Button';
 import { theme } from '@ui/styles/theme';
+
 import { useOnboarding } from '../../context/useOnboarding';
+import { TOTAL_STEPS } from '../../steps';
 import { styles } from './styles';
 
 export function OnboardingHeader() {
   const { top } = useSafeAreaInsets();
-  const { previousStep } = useOnboarding();
+  const { previousStep, currentStepIndex } = useOnboarding();
+
+  const widthAnimationRef = useRef(new Animated.Value(0));
+
+  useEffect(() => {
+    Animated.timing(widthAnimationRef.current, {
+      toValue: (currentStepIndex + 1) * 100 / TOTAL_STEPS,
+      duration: 300,
+      useNativeDriver: false,
+    }).start();
+  }, [currentStepIndex]);
 
   return (
     <SafeAreaView>
@@ -20,9 +32,17 @@ export function OnboardingHeader() {
         </Button>
 
         <View style={styles.progressBarBackground}>
-          <View style={styles.progressBarForeground}>
+          <Animated.View style={[
+            styles.progressBarForeground,
+            {
+              width: widthAnimationRef.current.interpolate({
+                inputRange: [0, 100],
+                outputRange: ['0%', '100%'],
+              }),
+            },
+          ]}>
 
-          </View>
+          </Animated.View>
         </View>
 
         <View style={styles.rightActionPlaceholder} />
