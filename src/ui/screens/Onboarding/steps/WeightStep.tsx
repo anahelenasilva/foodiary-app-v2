@@ -4,6 +4,7 @@ import React from 'react';
 import { Button } from '@ui/components/Button';
 import { FormGroup } from '@ui/components/FormGroup';
 import { Input } from '@ui/components/Input';
+import { formatDecimal } from '@ui/shared/number/formatDecimal';
 import { theme } from '@ui/styles/theme';
 import { Step, StepContent, StepFooter, StepHeader, StepSubtitle, StepTitle } from '../components/Step';
 import { useOnboarding } from '../context/useOnboarding';
@@ -20,7 +21,11 @@ export function WeightStep() {
 
       <StepContent position="center">
         <FormGroup label="Peso" style={{ width: '100%' }}>
-          <Input placeholder="80" keyboardType="numeric" />
+          <Input
+            placeholder="80"
+            keyboardType="numeric"
+            formatter={formatDecimal}
+          />
         </FormGroup>
       </StepContent>
 
