@@ -34,6 +34,7 @@ export function CreateAccountStep() {
               autoComplete="name"
               returnKeyType="next"
               onSubmitEditing={() => emailInputRef.current?.focus()}
+              autoFocus
             />
           </FormGroup>
 
