@@ -1,19 +1,12 @@
 import { ArrowRightIcon } from 'lucide-react-native';
 import React from 'react';
 
+import { ActivityLevel } from '@app/types/ActivityLevel';
 import { Button } from '@ui/components/Button';
 import { RadioGroup, RadioGroupDescription, RadioGroupIcon, RadioGroupItem, RadioGroupItemInfo, RadioGroupLabel } from '@ui/components/RadioGroup';
 import { theme } from '@ui/styles/theme';
 import { Step, StepContent, StepFooter, StepHeader, StepTitle } from '../components/Step';
 import { useOnboarding } from '../context/useOnboarding';
-
-export enum ActivityLevel {
-  SEDENTARY = 'SEDENTARY',
-  LIGHT = 'LIGHT',
-  MODERATE = 'MODERATE',
-  HEAVY = 'HEAVY',
-  ATHLETE = 'ATHLETE'
-}
 
 export function ActivityLevelStep() {
   const { nextStep } = useOnboarding();
