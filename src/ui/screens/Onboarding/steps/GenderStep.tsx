@@ -16,9 +16,9 @@ export function GenderStep() {
   const form = useFormContext<OnboardingSchema>();
 
   async function handleNextStep() {
-    const isGoalValid = await form.trigger('gender');
+    const isValid = await form.trigger('gender');
 
-    if (isGoalValid) {
+    if (isValid) {
       nextStep();
     }
   }

@@ -30,9 +30,9 @@ export function BirthDateStep() {
   }
 
   async function handleNextStep() {
-    const isGoalValid = await form.trigger('birthDate');
+    const isValid = await form.trigger('birthDate');
 
-    if (isGoalValid) {
+    if (isValid) {
       nextStep();
     }
   }
