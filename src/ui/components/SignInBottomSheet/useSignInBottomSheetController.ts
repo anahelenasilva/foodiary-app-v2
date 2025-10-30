@@ -5,6 +5,7 @@ import { useForm } from 'react-hook-form';
 import { Alert, TextInput } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
+import { AuthService } from '@app/services/AuthService';
 import { ISignInBottomSheet } from './ISignInBottomSheet';
 import { signInSchema } from './schema';
 
@@ -21,8 +22,14 @@ export function useSignInBottomSheetController(ref: React.Ref<ISignInBottomSheet
     open: () => bottomSheetModalRef.current?.present(),
   }), []);
 
-  const handleSubmit = form.handleSubmit((formData) => {
-    Alert.alert('Enviando dados do form', JSON.stringify(formData));
+  const handleSubmit = form.handleSubmit(async (data) => {
+    try {
+      const response = await AuthService.signIn(data);
+
+      console.log({ response });
+    } catch {
+      Alert.alert('Oops!', 'As credenciais informadas são inválidas');
+    }
   });
 
   return {

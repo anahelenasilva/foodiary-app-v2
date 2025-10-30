@@ -51,6 +51,7 @@ export function SignInBottomSheet({ ref }: ISignInBottomSheetProps) {
                     onSubmitEditing={() => passwordInputRef.current?.focus()}
                     value={field.value}
                     onChangeText={field.onChange}
+                    disabled={form.formState.isSubmitting}
                   />
                 </FormGroup>
               )}
@@ -72,12 +73,16 @@ export function SignInBottomSheet({ ref }: ISignInBottomSheetProps) {
                     onSubmitEditing={handleSubmit}
                     value={field.value}
                     onChangeText={field.onChange}
+                    disabled={form.formState.isSubmitting}
                   />
                 </FormGroup>
               )}
             />
 
-            <Button onPress={handleSubmit}>
+            <Button
+              onPress={handleSubmit}
+              isLoading={form.formState.isSubmitting}
+            >
               Entrar
             </Button>
           </View>
