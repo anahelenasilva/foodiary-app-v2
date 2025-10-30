@@ -16,9 +16,9 @@ export const onboardingSchema = z.object({
     password: z.string().min(8, 'Pelo menos 8 caracteres'),
     confirmPassword: z.string().min(1, 'Confirme a sua senha'),
   }).refine(
-    ({ password, confirmPassword }) => password !== confirmPassword,
+    ({ password, confirmPassword }) => password === confirmPassword,
     {
-      message: 'As senhas não coincidem',
+      error: 'As senhas não coincidem',
       path: ['confirmPassword'],
     },
   ),
