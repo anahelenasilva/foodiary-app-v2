@@ -1,9 +1,12 @@
 import React, { useRef } from 'react';
-import { TextInput, View } from 'react-native';
+import { Alert, TextInput, View } from 'react-native';
 
+import { AuthService } from '@app/services/AuthService';
+import { ErrorCode } from '@app/types/ErrorCode';
 import { Button } from '@ui/components/Button';
 import { FormGroup } from '@ui/components/FormGroup';
 import { Input } from '@ui/components/Input';
+import { isAxiosError } from 'axios';
 import { Controller, useFormContext } from 'react-hook-form';
 import { Step, StepContent, StepFooter, StepHeader, StepSubtitle, StepTitle } from '../components/Step';
 import { OnboardingSchema } from '../schema';
@@ -15,8 +18,36 @@ export function CreateAccountStep() {
 
   const form = useFormContext<OnboardingSchema>();
 
-  const handleSubmit = form.handleSubmit(formData => {
-    console.log({ formData: JSON.stringify(formData, null, 2) });
+  const handleSubmit = form.handleSubmit(async data => {
+    try {
+      const birthDate = data.birthDate.toISOString().split('T')[0];
+
+      const response = await AuthService.signUp({
+        account: {
+          email: data.account.email,
+          password: data.account.password,
+        },
+        profile: {
+          name: data.account.name,
+          activityLevel: data.activityLevel,
+          birthDate,
+          gender: data.gender,
+          goal: data.goal,
+          weight: Number(data.weight),
+          height: Number(data.height),
+        },
+      });
+
+      console.log({ response });
+    } catch (error) {
+      if (isAxiosError(error) &&
+        error.response?.data?.error?.code === ErrorCode.EMAIL_ALREADY_IN_USE) {
+        Alert.alert('Oops!', 'Este e-mail já está sendo usado por outro usuário.');
+        return;
+      }
+
+      Alert.alert('Oops!', 'Ocoreu um erro ao criar a sua conta. Por favor, tente novamente.');
+    }
   });
 
   return (
@@ -43,6 +74,7 @@ export function CreateAccountStep() {
                   value={field.value}
                   onChangeText={field.onChange}
                   autoFocus
+                  disabled={form.formState.isSubmitting}
                 />
               </FormGroup>
             )}
@@ -64,6 +96,7 @@ export function CreateAccountStep() {
                   onSubmitEditing={() => passwordInputRef.current?.focus()}
                   value={field.value}
                   onChangeText={field.onChange}
+                  disabled={form.formState.isSubmitting}
                 />
               </FormGroup>
             )}
@@ -85,6 +118,7 @@ export function CreateAccountStep() {
                   value={field.value}
                   onChangeText={field.onChange}
                   onSubmitEditing={() => confirmPasswordInputRef.current?.focus()}
+                  disabled={form.formState.isSubmitting}
                 />
               </FormGroup>
             )}
@@ -106,6 +140,7 @@ export function CreateAccountStep() {
                   value={field.value}
                   onChangeText={field.onChange}
                   onSubmitEditing={handleSubmit}
+                  disabled={form.formState.isSubmitting}
                 />
               </FormGroup>
             )}
@@ -114,7 +149,11 @@ export function CreateAccountStep() {
       </StepContent>
 
       <StepFooter align="start">
-        <Button onPress={handleSubmit} style={{ width: '100%' }}>
+        <Button
+          onPress={handleSubmit}
+          style={{ width: '100%' }}
+          isLoading={form.formState.isSubmitting}
+        >
           Criar conta
         </Button>
       </StepFooter>
