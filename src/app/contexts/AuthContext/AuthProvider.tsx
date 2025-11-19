@@ -14,8 +14,12 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     await AuthService.signUp(payload);
   }, []);
 
+  const signOut = useCallback(async () => {
+    setSignedIn(false);
+  }, []);
+
   return (
-    <AuthContext.Provider value={{ signedIn, signIn, signUp }}>
+    <AuthContext.Provider value={{ signedIn, signIn, signUp, signOut }}>
       {children}
     </AuthContext.Provider>
   );

@@ -28,9 +28,22 @@ export function RootStack() {
     <Stack.Navigator
       screenOptions={{ headerShown: false }}
     >
-      {!signedIn && <Stack.Screen name='Auth' component={AuthStack} />}
+      {!signedIn &&
+        (<Stack.Screen
+          name='Auth'
+          component={AuthStack}
+          options={{
+            animationTypeForReplace: 'pop',
+          }}
+        />
+        )}
 
-      {signedIn && <Stack.Screen name='App' component={AppStack} />}
+      {signedIn && (
+        <Stack.Screen
+          name='App'
+          component={AppStack}
+        />
+      )}
     </Stack.Navigator>
   );
 }
