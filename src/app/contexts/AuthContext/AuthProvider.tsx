@@ -9,11 +9,21 @@ import { AuthContext } from '.';
 
 SplashScreen.preventAutoHideAsync();
 
+interface ISetupParams {
+  accessToken: string;
+  refreshToken: string;
+}
+
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const { account, loadAccount } = useAccount({ enabled: false });
   const [isReady, setIsReady] = useState(false);
 
-  console.log({ account });
+  const setupAuth = useCallback(async (tokens: ISetupParams) => {
+    Service.setAuthToken(tokens.accessToken);
+    await loadAccount();
+    SplashScreen.hideAsync();
+    setIsReady(true);
+  }, []);
 
   useLayoutEffect(() => {
     async function load() {
@@ -25,10 +35,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         return;
       }
 
-      Service.setAuthToken(tokens.accessToken);
-      await loadAccount();
-      SplashScreen.hideAsync();
-      setIsReady(true);
+      await setupAuth(tokens);
     }
 
     load();
@@ -36,13 +43,13 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const signIn = useCallback(async (payload: AuthService.SignInPayload) => {
     const tokens = await AuthService.signIn(payload);
-
+    await setupAuth(tokens);
     await AuthTokensManager.save(tokens);
   }, []);
 
   const signUp = useCallback(async (payload: AuthService.SignUpPayload) => {
     const tokens = await AuthService.signUp(payload);
-
+    await setupAuth(tokens);
     await AuthTokensManager.save(tokens);
   }, []);
 
