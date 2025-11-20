@@ -1,3 +1,4 @@
+import * as SplashScreen from 'expo-splash-screen';
 import React, { useCallback, useLayoutEffect, useState } from 'react';
 
 import { useAccount } from '@app/hooks/queries/useAccount';
@@ -6,10 +7,11 @@ import { AuthService } from '@app/services/AuthService';
 import { Service } from '@app/services/Service';
 import { AuthContext } from '.';
 
-export function AuthProvider({ children }: { children: React.ReactNode }) {
-  const [signedIn, setSignedIn] = useState(false);
+SplashScreen.preventAutoHideAsync();
 
+export function AuthProvider({ children }: { children: React.ReactNode }) {
   const { account, loadAccount } = useAccount({ enabled: false });
+  const [isReady, setIsReady] = useState(false);
 
   console.log({ account });
 
@@ -18,13 +20,15 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       const tokens = await AuthTokensManager.load();
 
       if (!tokens) {
-        setSignedIn(false);
+        setIsReady(true);
+        SplashScreen.hideAsync();
         return;
       }
 
       Service.setAuthToken(tokens.accessToken);
       await loadAccount();
-      setSignedIn(true);
+      SplashScreen.hideAsync();
+      setIsReady(true);
     }
 
     load();
@@ -34,8 +38,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     const tokens = await AuthService.signIn(payload);
 
     await AuthTokensManager.save(tokens);
-
-    setSignedIn(true);
   }, []);
 
   const signUp = useCallback(async (payload: AuthService.SignUpPayload) => {
@@ -45,12 +47,15 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   const signOut = useCallback(async () => {
-    setSignedIn(false);
     await AuthTokensManager.clear();
   }, []);
 
+  if (!isReady) {
+    return null;
+  }
+
   return (
-    <AuthContext.Provider value={{ signedIn, signIn, signUp, signOut }}>
+    <AuthContext.Provider value={{ signedIn: !!account, signIn, signUp, signOut }}>
       {children}
     </AuthContext.Provider>
   );
