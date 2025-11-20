@@ -1,10 +1,12 @@
 import * as SplashScreen from 'expo-splash-screen';
 import React, { useCallback, useLayoutEffect, useState } from 'react';
 
+import { useForceRender } from '@app/hooks/app/useForceRender';
 import { useAccount } from '@app/hooks/queries/useAccount';
 import { AuthTokensManager } from '@app/lib/AuthTokensManager';
 import { AuthService } from '@app/services/AuthService';
 import { Service } from '@app/services/Service';
+import { useQueryClient } from '@tanstack/react-query';
 import { AuthContext } from '.';
 
 SplashScreen.preventAutoHideAsync();
@@ -15,8 +17,11 @@ interface ISetupParams {
 }
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
-  const { account, loadAccount } = useAccount({ enabled: false });
   const [isReady, setIsReady] = useState(false);
+
+  const { account, loadAccount } = useAccount({ enabled: false });
+  const queryClient = useQueryClient();
+  const forceRender = useForceRender();
 
   const setupAuth = useCallback(async (tokens: ISetupParams) => {
     Service.setAuthToken(tokens.accessToken);
@@ -54,8 +59,12 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   const signOut = useCallback(async () => {
+    Service.removeAccessToken();
+
+    queryClient.clear();
+    forceRender();
     await AuthTokensManager.clear();
-  }, []);
+  }, [queryClient]);
 
   if (!isReady) {
     return null;
