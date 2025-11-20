@@ -5,4 +5,8 @@ export abstract class Service {
   protected static client = axios.create({
     baseURL: env.api.url,
   });
+
+  static setAuthToken(accessToken: string) {
+    this.client.defaults.headers.common.Authorization = `Bearer ${accessToken}`;
+  }
 }

@@ -1,20 +1,34 @@
+import React, { useCallback, useLayoutEffect, useState } from 'react';
+
+import { useAccount } from '@app/hooks/queries/useAccount';
 import { AuthTokensManager } from '@app/lib/AuthTokensManager';
 import { AuthService } from '@app/services/AuthService';
-import React, { useCallback, useLayoutEffect, useState } from 'react';
+import { Service } from '@app/services/Service';
 import { AuthContext } from '.';
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [signedIn, setSignedIn] = useState(false);
 
+  const { account, loadAccount } = useAccount({ enabled: false });
+
+  console.log({ account });
+
   useLayoutEffect(() => {
     async function load() {
       const tokens = await AuthTokensManager.load();
 
-      setSignedIn(!!tokens);
+      if (!tokens) {
+        setSignedIn(false);
+        return;
+      }
+
+      Service.setAuthToken(tokens.accessToken);
+      await loadAccount();
+      setSignedIn(true);
     }
 
     load();
-  }, []);
+  }, [loadAccount]);
 
   const signIn = useCallback(async (payload: AuthService.SignInPayload) => {
     const tokens = await AuthService.signIn(payload);
